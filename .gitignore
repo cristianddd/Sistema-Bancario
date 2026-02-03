@@ -1,0 +1,19 @@
+# === Java / Maven ===
+target/
+*.log
+
+# === IntelliJ / IDE ===
+.idea/
+*.iml
+out/
+
+# === VS Code ===
+.vscode/
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === Docker ===
+**/.env
+**/.env.*
