@@ -1,114 +1,256 @@
-# bank-system (infra scaffolding)
+# Bank System – Infraestrutura (Monorepo Skeleton)
 
-This repository is a **monorepo skeleton** to host multiple microservices (e.g., `account-service`, `auth-service`, `audit-service`) plus a shared local infrastructure stack.
+Este repositório é um **esqueleto de monorepo** projetado para hospedar múltiplos **microsserviços** (ex.: `account-service`, `auth-service`, `audit-service`) juntamente com uma **infraestrutura local compartilhada**, baseada em Docker.
 
-You asked to start with **only the infra + README + .gitignore**. The service folders are intentionally empty placeholders so you can add services gradually.
+O objetivo inicial é fornecer **apenas a camada de infraestrutura**, documentação e padronização, permitindo que novos microsserviços sejam adicionados de forma incremental e organizada.
 
 ---
 
-## Repository layout
+## 📁 Estrutura do repositório
 
-```
 bank-system/
-  services/                 # each microservice will live in its own folder
-    account-service/        # (create later)
-    auth-service/           # (create later)
-    audit-service/          # (create later)
-  infra/
-    docker-compose.yml      # one command to boot the stack
-    prometheus/prometheus.yml
-    grafana/provisioning/   # auto-provision Prometheus datasource + dashboards
-  docs/                     # architecture notes (optional)
-  postman/                  # collections (optional)
-```
+services/ # Cada microsserviço viverá em seu próprio diretório
+account-service/ # (placeholder – adicionar futuramente)
+auth-service/ # (placeholder – adicionar futuramente)
+audit-service/ # (placeholder – adicionar futuramente)
+infra/
+docker-compose.yml # Inicializa toda a stack de infraestrutura
+prometheus/
+prometheus.yml # Configuração de scrape de métricas
+grafana/
+provisioning/ # Datasources e dashboards provisionados automaticamente
+docs/ # Documentação de arquitetura (opcional)
+postman/ # Collections de API (opcional)
+
 
 ---
 
-## Prerequisites
+## 🎯 Objetivos do projeto
+
+- Servir como **base de infraestrutura** para um sistema bancário distribuído
+- Facilitar a adoção de **microsserviços com Spring Boot**
+- Padronizar **observabilidade** (métricas e monitoramento)
+- Demonstrar boas práticas de **arquitetura, DevOps e escalabilidade**
+- Atuar como **repositório de portfólio profissional**
+
+---
+
+## 🧰 Tecnologias utilizadas (Infra)
+
+- Docker & Docker Compose
+- Prometheus
+- Grafana
+- PostgreSQL (quando os serviços forem adicionados)
+
+---
+
+## ✅ Pré-requisitos
+
+- Docker Desktop (Windows/macOS) ou Docker Engine (Linux)
+- Docker Compose v2
+
+---
+
+## 🚀 Inicialização rápida (somente infraestrutura)
+
+A partir da raiz do repositório, execute:
+
+```bash
+docker compose -f infra/docker-compose.yml up -d
+Serviços disponíveis:
+
+Prometheus: http://localhost:9090
+
+Grafana: http://localhost:3000
+
+Usuário: admin
+
+Senha: admin (alteração obrigatória no primeiro login)
+
+➕ Adicionando um microsserviço futuramente (exemplo)
+Criar o diretório do serviço:
+
+services/account-service/
+Adicionar o projeto Spring Boot (pom.xml, src/, Dockerfile, etc.)
+
+Registrar o serviço no infra/docker-compose.yml:
+
+account-service:
+  build: ../services/account-service
+  ports:
+    - "8080:8080"
+  environment:
+    SPRING_PROFILES_ACTIVE: docker
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/accountdb
+    SPRING_DATASOURCE_USERNAME: postgres
+    SPRING_DATASOURCE_PASSWORD: postgres
+  depends_on:
+    - postgres
+Habilitar métricas:
+
+Spring Boot Actuator
+
+Micrometer Prometheus
+
+Endpoint: /actuator/prometheus
+
+Registrar o job no infra/prometheus/prometheus.yml.
+
+🌐 Observações importantes sobre networking
+Dentro do Docker Compose, os containers se comunicam pelo nome do serviço, não por localhost.
+
+Correto:
+
+http://prometheus:9090
+
+http://localhost:9090
+
+🛠️ Comandos úteis
+Parar os containers:
+
+docker compose -f infra/docker-compose.yml down
+Parar e remover volumes:
+
+docker compose -f infra/docker-compose.yml down -v
+Ver logs:
+
+docker compose -f infra/docker-compose.yml logs -f
+🔮 Próximos passos planejados
+Implementação dos microsserviços (Account, Auth, Audit)
+
+CI/CD com GitHub Actions
+
+Observabilidade avançada (alertas, SLAs)
+
+API Gateway e Service Discovery
+
+Segurança com OAuth2 / JWT
+```
+
+# Bank System – Infrastructure (Monorepo Skeleton) in English
+
+This repository is a **monorepo skeleton** designed to host multiple **microservices** (e.g. `account-service`, `auth-service`, `audit-service`) along with a **shared local infrastructure stack**, fully containerized using Docker.
+
+The initial focus is **infrastructure only**, allowing services to be added incrementally as the system evolves.
+
+---
+
+## 📁 Repository structure
+
+bank-system/
+services/ # Each microservice lives in its own folder
+account-service/ # (placeholder – to be added later)
+auth-service/ # (placeholder – to be added later)
+audit-service/ # (placeholder – to be added later)
+infra/
+docker-compose.yml # One command to boot the entire stack
+prometheus/
+prometheus.yml # Metrics scraping configuration
+grafana/
+provisioning/ # Auto-provisioned datasources and dashboards
+docs/ # Architecture notes (optional)
+postman/ # API collections (optional)
+
+
+---
+
+## 🎯 Project goals
+
+- Provide a **solid infrastructure baseline** for a distributed banking system
+- Support **Spring Boot microservices**
+- Standardize **observability and monitoring**
+- Demonstrate **clean architecture, DevOps, and scalability**
+- Serve as a **professional portfolio repository**
+
+---
+
+## 🧰 Infrastructure stack
+
+- Docker & Docker Compose
+- Prometheus
+- Grafana
+- PostgreSQL (used once services are introduced)
+
+---
+
+## ✅ Prerequisites
 
 - Docker Desktop (Windows/macOS) or Docker Engine (Linux)
 - Docker Compose v2
 
 ---
 
-## Quick start (infra only)
+## 🚀 Quick start (infra only)
 
 From the repository root:
 
 ```bash
 docker compose -f infra/docker-compose.yml up -d
-```
+Available services:
 
-Open:
+Prometheus: http://localhost:9090
 
-- **Prometheus:** http://localhost:9090
-- **Grafana:** http://localhost:3000  
-  Default login: `admin` / `admin` (Grafana will ask you to change it)
+Grafana: http://localhost:3000
 
----
+Default user: admin
 
-## Adding a service later (example: account-service)
+Default password: admin (change required on first login)
 
-1. Create the folder:
-   ```
-   services/account-service/
-   ```
-2. Put your Spring Boot project there (pom.xml, src/, Dockerfile, etc.)
-3. Add a service section in `infra/docker-compose.yml` pointing to the build context:
-   ```yaml
-   account-service:
-     build: ../services/account-service
-     ports:
-       - "8080:8080"
-     environment:
-       SPRING_PROFILES_ACTIVE: docker
-       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/accountdb
-       SPRING_DATASOURCE_USERNAME: postgres
-       SPRING_DATASOURCE_PASSWORD: postgres
-     depends_on:
-       - postgres
-   ```
+➕ Adding a microservice later (example)
+Create the service folder:
 
-4. Expose metrics (recommended):
-   - Enable Spring Boot Actuator + Prometheus registry
-   - Expose `/actuator/prometheus`
-5. Then add a scrape job in `infra/prometheus/prometheus.yml` (template included).
+services/account-service/
+Add your Spring Boot project (pom.xml, src/, Dockerfile, etc.)
 
----
+Register the service in infra/docker-compose.yml:
 
-## Notes on networking (important)
+account-service:
+  build: ../services/account-service
+  ports:
+    - "8080:8080"
+  environment:
+    SPRING_PROFILES_ACTIVE: docker
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/accountdb
+    SPRING_DATASOURCE_USERNAME: postgres
+    SPRING_DATASOURCE_PASSWORD: postgres
+  depends_on:
+    - postgres
+Enable metrics:
 
-Inside Docker Compose, containers talk to each other by **service name**.
-Example: Grafana should use:
+Spring Boot Actuator
 
-- `http://prometheus:9090`
+Micrometer Prometheus
 
-(not `localhost:9090`), because `localhost` inside the container means “the same container”.
+Endpoint: /actuator/prometheus
 
----
+Add a scrape job to prometheus.yml.
 
-## Common commands
+🌐 Networking notes
+Inside Docker Compose, containers communicate using service names, not localhost.
 
-Stop:
-```bash
+Correct:
+
+http://prometheus:9090
+Incorrect:
+
+http://localhost:9090
+🛠️ Useful commands
+Stop containers:
+
 docker compose -f infra/docker-compose.yml down
-```
+Stop and remove volumes:
 
-Stop + remove volumes (wipes DB, dashboards state, etc.):
-```bash
 docker compose -f infra/docker-compose.yml down -v
-```
+View logs:
 
-See logs:
-```bash
 docker compose -f infra/docker-compose.yml logs -f
-```
+🔮 Planned next steps
+Implement core microservices (Account, Auth, Audit)
 
----
+CI/CD with GitHub Actions
 
-## Next steps (when you grow)
+Advanced observability (alerts, SLIs/SLOs)
 
-- Add per-service README files under `services/<service>/README.md`
-- Add GitHub Actions workflow for CI
-- Add alert rules (Prometheus) + alert channels (Grafana)
+API Gateway and Service Discovery
 
+Security with OAuth2 / JWT
