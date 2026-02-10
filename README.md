@@ -138,9 +138,12 @@ The initial focus is **infrastructure only**, allowing services to be added incr
 ## 📁 Repository structure
 
 bank-system/
-services/ # Each microservice lives in its own folder
-account-service/ # (placeholder – to be added later)
-auth-service/ # (placeholder – to be added later)
+services/ 
+# Each microservice lives in its own folder
+account-service/
+# (placeholder – to be added later)
+auth-service/
+# (placeholder – to be added later)
 audit-service/ # (placeholder – to be added later)
 infra/
 docker-compose.yml # One command to boot the entire stack
