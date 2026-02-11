@@ -9,24 +9,23 @@ import com.bank.authservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Authentication API", description = "Endpoints for user registration and authentication")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthenticationService authenticationService;
     private final UserService userService;
-
-    public AuthController(AuthenticationService authenticationService, UserService userService) {
-        this.authenticationService = authenticationService;
-        this.userService = userService;
-    }
 
     @Operation(summary = "Register new user")
     @PostMapping("/register")
@@ -44,5 +43,13 @@ public class AuthController {
         } catch (BadCredentialsException ex) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage());
         }
+    }
+
+
+    @Operation(summary = "Promote a user to ADMIN role")
+    @PostMapping("/{userId}/promote")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void promoteToAdmin(@PathVariable UUID userId) {
+        userService.promoteToAdmin(userId);
     }
 }

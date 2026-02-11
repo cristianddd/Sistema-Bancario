@@ -89,4 +89,19 @@ public class UserService {
                 saved.getRoles()
         );
     }
+
+
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void promoteToAdmin(UUID userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (user.getRoles().contains(Role.ADMIN)) {
+            return;
+        }
+
+        user.getRoles().add(Role.ADMIN);
+        userRepository.save(user);
+    }
 }
