@@ -13,10 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -43,13 +45,5 @@ public class AuthController {
         } catch (BadCredentialsException ex) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage());
         }
-    }
-
-
-    @Operation(summary = "Promote a user to ADMIN role")
-    @PostMapping("/{userId}/promote")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void promoteToAdmin(@PathVariable UUID userId) {
-        userService.promoteToAdmin(userId);
     }
 }
