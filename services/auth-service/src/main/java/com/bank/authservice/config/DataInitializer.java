@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,8 +35,8 @@ public class DataInitializer {
                 UserEntity admin = new UserEntity();
                 admin.setId(UUID.randomUUID());
                 admin.setUsername(adminUsername);
-                admin.setEmail(adminEmail);
-                admin.setRoles(Set.of(Role.ADMIN));
+                admin.setEmail("admin@local");
+                admin.getRoles().add(Role.ADMIN);
                 admin.setEnabled(true);
                 admin.setPassword(passwordEncoder.encode(adminPassword));
 

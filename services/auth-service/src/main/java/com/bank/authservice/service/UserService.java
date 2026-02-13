@@ -78,7 +78,7 @@ public class UserService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRoles(Set.of(Role.USER));
+        user.getRoles().add(Role.USER);
         user.setEnabled(true);
 
         UserEntity saved = userRepository.save(user);
