@@ -28,9 +28,9 @@ services:
       retries: 15
 
 
-  account-service:
+  bank-account-service:
     build: ../services/account-service
-    container_name: account-service
+    container_name: bank-account-service
     ports:
       - "8080:8080"
     environment:
@@ -52,16 +52,16 @@ services:
       timeout: 5s
       retries: 15
 
-  auth-service:
+  bank-auth-service:
     build:
       context: ../services/auth-service
       dockerfile: Dockerfile
-    container_name: auth-service
+    container_name: bank-auth-service
     ports:
       - "8081:8081"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/authdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://bank-postgres:5432/authdb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
 
@@ -74,6 +74,33 @@ services:
       - bank-net
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 15
+
+  bank-transaction-service:
+    build: ../services/transaction-service
+    container_name: bank-transaction-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/transactiondb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SERVICES_ACCOUNT_BASE_URL: http://bank-account-service:8080
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      bank-account-service:
+        condition: service_started
+      prometheus:
+        condition: service_started
+    networks:
+      - bank-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
       interval: 20s
       timeout: 5s
       retries: 15

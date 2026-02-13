@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class DataInitializer {
                 admin.setId(UUID.randomUUID());
                 admin.setUsername(adminUsername);
                 admin.setEmail("admin@local");
-                admin.setRoles(Set.of(Role.ADMIN));
+                admin.getRoles().add(Role.ADMIN);
                 admin.setEnabled(true);
 
                 admin.setPassword(passwordEncoder.encode(adminPassword));

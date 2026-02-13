@@ -1,14 +1,16 @@
 server:
-  port: 8082
+  port: 8081
 
 spring:
   application:
     name: auth-service
 
+
   datasource:
     url: jdbc:postgresql://localhost:5432/authdb
-    username: auth
-    password: auth
+    username: postgres
+    password: postgres
+
 
 #  datasource:
 #    url: ${SPRING_DATASOURCE_URL}

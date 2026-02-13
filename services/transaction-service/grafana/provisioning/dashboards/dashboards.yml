@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: "Bank System Dashboards"
+    orgId: 1
+    folder: "Bank System"
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/dashboards
