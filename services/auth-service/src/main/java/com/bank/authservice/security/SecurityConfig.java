@@ -15,8 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -31,6 +31,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
+
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
@@ -40,11 +42,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/api/auth/login"),
+                                new AntPathRequestMatcher("/api/auth/register")
+                        ).permitAll()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/v3/api-docs/**"),
                                 new AntPathRequestMatcher("/swagger-ui/**"),
-                                new AntPathRequestMatcher("/actuator/**")
+                                new AntPathRequestMatcher("/actuator/health"),
+                                new AntPathRequestMatcher("/actuator/info"),
+                                new AntPathRequestMatcher("/actuator/prometheus")
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -80,7 +87,8 @@ public class SecurityConfig {
                             );
                             SecurityContextHolder.getContext().setAuthentication(auth);
                         }
-                    } catch (Exception ignored) {
+                    } catch (Exception ex) {
+                        log.debug("Token JWT inválido ou expirado", ex);
                     }
                 }
 

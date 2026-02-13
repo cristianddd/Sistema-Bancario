@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: ${SERVER_PORT:8081}
 
 spring:
   application:
@@ -7,15 +7,9 @@ spring:
 
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/authdb
-    username: postgres
-    password: postgres
-
-
-#  datasource:
-#    url: ${SPRING_DATASOURCE_URL}
-#    username: ${SPRING_DATASOURCE_USERNAME}
-#    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/authdb}
+    username: ${SPRING_DATASOURCE_USERNAME:auth}
+    password: ${SPRING_DATASOURCE_PASSWORD:auth}
 
   jpa:
     hibernate:
@@ -26,8 +20,8 @@ spring:
 
 security:
   jwt:
-    secret: "ChangeThisSecretInProductionChangeThisSecretInProduction"
-    expirationMs: 36000000
+    secret: ${SECURITY_JWT_SECRET:ChangeThisSecretInProductionChangeThisSecretInProduction}
+    expirationMs: ${SECURITY_JWT_EXPIRATION_MS:36000000}
 
 management:
   endpoints:
@@ -45,4 +39,14 @@ management:
 logging:
   level:
     root: INFO
-    com.example.authservice: DEBUG
+    com.bank.authservice: DEBUG
+
+
+app:
+  bootstrap:
+    admin:
+      enabled: ${APP_BOOTSTRAP_ADMIN_ENABLED:false}
+      username: ${APP_BOOTSTRAP_ADMIN_USERNAME:admin}
+      password: ${APP_BOOTSTRAP_ADMIN_PASSWORD:admin}
+      email: ${APP_BOOTSTRAP_ADMIN_EMAIL:admin@local}
+
